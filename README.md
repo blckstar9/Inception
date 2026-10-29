@@ -117,7 +117,7 @@ Relevant technical references:
 - NGINX documentation: https://nginx.org/en/docs/
 - MariaDB documentation: https://mariadb.com/docs/
 
-ChatGPT was used to help generate Docker configuration,
+ChatGPT was used to help work on Docker configuration,
 shell scripts and documentation, and to explain and debug
 the infrastructure. The resulting services were tested
 inside the virtual machine.
