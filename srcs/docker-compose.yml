@@ -4,7 +4,7 @@ name: inception
 services:
   mariadb:
     container_name: mariadb
-    image: inception-mariadb:test
+    image: mariadb:inception
 
     build:
       context: ./requirements/mariadb
@@ -28,7 +28,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: inception-wordpress:test
+    image: wordpress:inception
 
     build:
       context: ./requirements/wordpress
@@ -63,7 +63,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: inception-nginx:test
+    image: nginx:inception
 
     build:
       context: ./requirements/nginx
@@ -105,14 +105,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/aybelaou/data/mariadb
+      device: ${DATA_ROOT}/mariadb
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/aybelaou/data/wordpress
+      device: ${DATA_ROOT}/wordpress
 
 networks:
   inception:

@@ -1,29 +1,29 @@
 NAME = inception
 
+
 COMPOSE = sudo docker compose \
 	--env-file srcs/.env \
 	-f srcs/docker-compose.yml
 
-DATA_DIR = /home/aybelaou/data
-
 .DEFAULT_GOAL := all
 
-.PHONY: all up down build re ps logs stop start
+.PHONY: all setup up down build re ps logs stop start
 
 all: up
 
-up:
-	mkdir -p $(DATA_DIR)/mariadb
-	mkdir -p $(DATA_DIR)/wordpress
+setup:
+	sh srcs/tools/setup.sh
+
+up: setup
 	$(COMPOSE) up -d --build
 
 down:
 	$(COMPOSE) down
 
-build:
+build: setup
 	$(COMPOSE) build
 
-re: down up
+re: setup down up
 
 ps:
 	$(COMPOSE) ps

@@ -1,3 +1,4 @@
+*This project has been created as part of the 42 curriculum by aybelaou.*
 
 # Inception
 
@@ -59,7 +60,7 @@ MariaDB
 The Docker images are built from Debian Bookworm rather than
 using prebuilt application images.
 
-## Configuration
+## Instructions
 
 1. Copy `srcs/.env.example` to `srcs/.env`.
 2. Replace the example values with your own configuration.
@@ -107,7 +108,7 @@ The data is preserved when the containers are recreated.
 The current TLS certificate is self-signed and intended for
 local development.
 
-## Resources and AI usage
+## Resources
 
 Relevant technical references:
 
