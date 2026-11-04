@@ -8,6 +8,24 @@ NGINX, WordPress with PHP-FPM, and MariaDB.
 
 The application runs inside a Linux virtual machine.
 
+## First-time setup
+
+From a fresh clone, run `make` in the project root.
+
+The setup script automatically creates the environment file,
+generates the required passwords, and prepares persistent
+storage directories.
+
+After installation, the WordPress administrator username is
+configured through `WORDPRESS_ADMIN_USER` in `srcs/.env`.
+
+The corresponding initial password is stored in
+`srcs/secrets/wp_admin_password`.
+
+Never publish or share the secret files.
+
+Running `make` again does not replace existing passwords.
+
 ## Starting the application
 
 Open a terminal inside the virtual machine and navigate

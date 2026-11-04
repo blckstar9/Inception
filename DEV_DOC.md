@@ -105,6 +105,38 @@ Container paths:
 The NGINX container also mounts WordPress files,
 but only in read-only mode.
 
+## Automated environment setup
+
+The script `srcs/tools/setup.sh` is executed by the Makefile.
+
+It prepares the environment before Docker Compose starts.
+
+For a fresh installation:
+
+```bash
+make setup
+make
+```
+
+The setup script is idempotent: existing environment files
+and non-empty secret files are preserved.
+
+The persistent storage root is configured using `DATA_ROOT`
+in `srcs/.env`. By default, it is set to `$HOME/data` for
+the user running the setup script.
+
+The two bind-backed Docker volumes use:
+
+- `${DATA_ROOT}/mariadb`
+- `${DATA_ROOT}/wordpress`
+
+The four required secret files are generated with OpenSSL.
+They are excluded from Git.
+
+For an existing installation, do not replace database or
+WordPress passwords by simply regenerating secret files.
+Stored credentials must be updated consistently.
+
 ## Environment configuration
 
 The file `srcs/.env` contains non-secret application

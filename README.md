@@ -62,13 +62,34 @@ using prebuilt application images.
 
 ## Instructions
 
-1. Copy `srcs/.env.example` to `srcs/.env`.
-2. Replace the example values with your own configuration.
-3. Create the required secret files in `srcs/secrets/`.
-4. Ensure that the persistent data directories exist.
-5. Build and start the infrastructure using `make`.
 
-Never commit real passwords, private keys or secret files.
+### First-time setup
+
+Clone the repository and enter the project directory.
+
+```bash
+git clone <repository-url> Inception
+cd Inception
+make
+```
+
+The Makefile automatically runs `srcs/tools/setup.sh`, which:
+
+1. Creates `srcs/.env` from `srcs/.env.example` if missing.
+2. Configures the domain using the current Linux username.
+3. Creates the persistent data directories.
+4. Generates four random secrets if missing.
+5. Starts the infrastructure using Docker Compose.
+
+Review `srcs/.env` to customize the domain, site title, and
+WordPress usernames before the first installation.
+
+Existing secrets and persistent data are preserved when
+the setup script is run again.
+
+Never commit environment files containing private information,
+passwords, private keys, or secret files.
+
 
 ## Usage
 
