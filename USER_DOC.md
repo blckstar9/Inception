@@ -54,10 +54,12 @@ Administration dashboard:
 
 https://aybelaou.42.fr/wp-admin/
 
-The client must be able to reach the VM's HTTPS port.
+For local access, open a web browser inside the virtual
+machine and navigate to https://aybelaou.42.fr.
 
-In the current development environment, access from the
-host computer uses an SSH tunnel and SOCKS proxy.
+The domain must resolve to the VM's local HTTPS endpoint.
+When using the browser inside the VM, it can resolve to
+127.0.0.1.
 
 A browser warning may appear because the development TLS
 certificate is self-signed.

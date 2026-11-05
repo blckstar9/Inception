@@ -261,16 +261,32 @@ MariaDB persistence can also be tested by creating a
 temporary SQL table, recreating the container and checking
 that the table still exists.
 
-## Development access
 
-The VM currently uses QEMU user-mode NAT.
+## Local browser access
 
-The host accesses SSH through a forwarded local port,
-and the browser can access the site through an SSH SOCKS
-tunnel.
+The WordPress website is served by NGINX on HTTPS port 443.
 
-These host-specific development settings are not part
-of the Docker Compose infrastructure itself.
+To access it from a browser running inside the VM, ensure
+that `/etc/hosts` contains:
+
+```text
+127.0.0.1 aybelaou.42.fr
+```
+
+Verify the hostname resolution with:
+
+```bash
+getent ahostsv4 aybelaou.42.fr
+```
+
+The browser can then access `https://aybelaou.42.fr`
+without an SSH tunnel or proxy.
+
+A self-signed TLS certificate warning may appear.
+
+The graphical browser is a VM administration tool and is
+not part of the Docker Compose infrastructure.
+
 
 ## Git workflow
 
