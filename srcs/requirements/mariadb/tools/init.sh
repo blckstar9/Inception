@@ -48,40 +48,20 @@ chown -R mysql:mysql /var/lib/mysql
 
 # Initialize the MariaDB system tables if absent.
 if [ ! -d /var/lib/mysql/mysql ]; then
-    mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+	mariadb-install-db \
+    --user=mysql \
+    --datadir=/var/lib/mysql \
+    --skip-test-db
 fi
 
 # Run the WordPress-specific setup only once.
 if [ ! -f /var/lib/mysql/.inception-initialized ]; then
-    echo "Initializing Inception MariaDB..."
-
-    mariadbd --user=mysql --skip-networking \
-        --socket=/run/mysqld/mysqld.sock &
-
-    pid="$!"
-    trap 'kill "$pid" 2>/dev/null || true' EXIT
-
-    attempts=0
-
-    until mariadb --protocol=socket -u root \
-        -e "SELECT 1" >/dev/null 2>&1; do
-
-        if ! kill -0 "$pid" 2>/dev/null; then
-            echo "MariaDB failed to start" >&2
-            exit 1
-        fi
-
-        attempts=$((attempts + 1))
-
-        if [ "$attempts" -ge 30 ]; then
-            echo "MariaDB startup timed out" >&2
-            exit 1
-        fi
-
-        sleep 1
-    done
-
-    mariadb --protocol=socket -u root <<SQL
+	# Configure the database without starting a background server.
+    mariadbd --user=mysql \
+        --datadir=/var/lib/mysql \
+        --skip-networking \
+        --bootstrap <<SQL
+FLUSH PRIVILEGES;
 CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
 
 SET @db_password = CONVERT(0x${DB_PASSWORD_HEX} USING utf8mb4);
@@ -114,10 +94,6 @@ EXECUTE statement;
 DEALLOCATE PREPARE statement;
 SQL
 
-    # Stop the temporary server cleanly.
-    kill -TERM "$pid"
-    wait "$pid"
-    trap - EXIT
 
     touch /var/lib/mysql/.inception-initialized
     chown mysql:mysql /var/lib/mysql/.inception-initialized
