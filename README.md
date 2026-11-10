@@ -143,3 +143,53 @@ ChatGPT was used to help work on Docker configuration,
 shell scripts and documentation, and to explain and debug
 the infrastructure. The resulting services were tested
 inside the virtual machine.
+
+## Technical design choices
+
+### Virtual machines vs. Docker
+
+A virtual machine runs a complete guest operating system with
+its own kernel. Docker containers share the host kernel and
+isolate applications and their dependencies.
+
+This project uses a Debian virtual machine as the development
+environment, while Docker provides separate, reproducible
+containers for each mandatory service.
+
+### Docker secrets vs. environment variables
+
+Environment variables are used for non-sensitive configuration,
+such as the domain name and database name.
+
+Passwords are stored in local secret files and provided to
+containers through Docker Compose secrets, under /run/secrets.
+This avoids placing passwords directly in the Compose file or
+container environment variables.
+
+Secret files must remain protected and excluded from Git.
+
+### Docker networks vs. host networking
+
+A Docker bridge network allows containers to communicate using
+service names while keeping their internal ports separate from
+the host.
+
+Host networking shares the host network stack directly and
+offers less network isolation.
+
+This project uses a dedicated bridge network. Only NGINX
+publishes port 443 on the virtual machine.
+
+### Docker volumes vs. bind mounts
+
+Docker named volumes provide persistent storage independently
+of the lifecycle of individual containers.
+
+A bind mount maps a specific directory from the host filesystem
+into a container.
+
+This project combines both approaches: it declares named Docker
+volumes using the local driver with bind-backed directories
+under ${DATA_ROOT}. MariaDB and WordPress data therefore persist
+across container recreation and are stored at the required
+locations on the virtual machine.
